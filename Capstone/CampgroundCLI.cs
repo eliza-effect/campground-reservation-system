@@ -14,7 +14,7 @@ namespace Capstone
     {
         const string Command_AllParks = "1";
         const string Command_AllCampgrounds = "2";
-        const string Command_SearchDateAvailability = "3";
+        const string Command_MakeReservation = "3";
         const string Command_EmployeesWithoutProjects = "4";
         const string Command_ProjectList = "5";
         const string Command_CreateDepartment = "6";
@@ -24,7 +24,7 @@ namespace Capstone
         const string Command_RemoveEmployeeFromProject = "10";
         const string Command_DisplayAssignedProjects = "11";
         const string Command_Quit = "q";
-        readonly string DatabaseConnection = ConfigurationManager.ConnectionStrings["ProjectDatabaseConnection"].ConnectionString;
+        readonly string DatabaseConnection = ConfigurationManager.ConnectionStrings["Campground"].ConnectionString;
 
         public void RunCLI()
         {
@@ -43,53 +43,21 @@ namespace Capstone
                         GetAllParks();
                         break;
 
-                    //case Command_AllEmployees:
-                    //    GetAllEmployees();
-                    //    break;
+                    case Command_AllCampgrounds:
+                        GetAllCampgrounds();
+                        break;
 
-                    //case Command_EmployeeSearch:
-                    //    EmployeeSearch();
-                    //    break;
+                    case Command_MakeReservation:
+                        SearchDates();
+                        break;
 
-                    //case Command_EmployeesWithoutProjects:
-                    //    GetEmployeesWithoutProjects();
-                    //    break;
+                    case Command_Quit:
+                        Console.WriteLine("Thank you for using the campground reservation system");
+                        return;
 
-                    //case Command_ProjectList:
-                    //    GetAllProjects();
-                    //    break;
-
-                    //case Command_CreateDepartment:
-                    //    CreateDepartment();
-                    //    break;
-
-                    //case Command_UpdateDepartment:
-                    //    UpdateDepartment();
-                    //    break;
-
-                    //case Command_CreateProject:
-                    //    CreateProject();
-                    //    break;
-
-                    //case Command_AssignEmployeeToProject:
-                    //    AssignEmployeeToProject();
-                    //    break;
-
-                    //case Command_RemoveEmployeeFromProject:
-                    //    RemoveEmployeeFromProject();
-                    //    break;
-
-                    //case Command_DisplayAssignedProjects:
-                    //    DisplayAssignedProjects();
-                    //    break;
-
-                    //case Command_Quit:
-                    //    Console.WriteLine("Thank you for using the project organizer");
-                    //    return;
-
-                    //default:
-                    //    Console.WriteLine("The command provided was not a valid command, please try again.");
-                    //    break;
+                    default:
+                        Console.WriteLine("The command provided was not a valid command, please try again.");
+                        break;
 
                 }
 
@@ -97,25 +65,25 @@ namespace Capstone
             }
         }
 
-        //private void DisplayAssignedProjects()
-        //{
-        //    int employeeId = CLIHelper.GetInteger("Select employee whose projects will be displayed: ");
+        private void GetAllCampgrounds()
+        {
+            int parkId = CLIHelper.GetInteger("Select park ID to show campgrounds: ");
 
-        //    ProjectSqlDAL dal = new ProjectSqlDAL(DatabaseConnection);
-        //    List<Project> projects = dal.DisplayAssignedProjects(employeeId);
+            CampgroundSqlDAL dal = new CampgroundSqlDAL(DatabaseConnection);
+            List<Campground> campgrounds = dal.DisplayAllCampgrounds(parkId);
 
-        //    if (projects.Count > 0)
-        //    {
-        //        projects.ForEach(proj =>
-        //        {
-        //            Console.WriteLine(proj);
-        //        });
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("**** NO RESULTS ****");
-        //    }
-        //}
+            if (campgrounds.Count > 0)
+            {
+                campgrounds.ForEach(c =>
+                {
+                    Console.WriteLine(c);
+                });
+            }
+            else
+            {
+                Console.WriteLine("**** NO RESULTS ****");
+            }
+        }
 
         //private void RemoveEmployeeFromProject()
         //{
@@ -180,27 +148,28 @@ namespace Capstone
         //    }
         //}
 
-        //private void UpdateDepartment()
-        //{
-        //    int departmentId = CLIHelper.GetInteger("Which department are you updating? (Provide integer ID)");
-        //    string updatedName = CLIHelper.GetString("Provide the new name:");
-        //    Department updatedDepartment = new Department
-        //    {
-        //        Id = departmentId,
-        //        Name = updatedName
-        //    };
-        //    DepartmentSqlDAL dal = new DepartmentSqlDAL(DatabaseConnection);
-        //    bool result = dal.UpdateDepartment(updatedDepartment);
+        private void SearchDates()
+        {
+            int campgroundId = CLIHelper.GetInteger("Which campground would you like to reserve? (Provide campground ID)");
+            DateTime desiredStartDate = CLIHelper.GetDateTime("What is your desired arrival date?");
+            DateTime desiredEndDate = CLIHelper.GetDateTime("What is your desired departure date?");
+            
+            {
+                Id = departmentId,
+                Name = updatedName
+            };
+            DepartmentSqlDAL dal = new DepartmentSqlDAL(DatabaseConnection);
+            bool result = dal.UpdateDepartment(updatedDepartment);
 
-        //    if (result)
-        //    {
-        //        Console.WriteLine("*** SUCCESS ***");
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("*** DID NOT UPDATE ***");
-        //    }
-        //}
+            if (result)
+            {
+                Console.WriteLine("*** SUCCESS ***");
+            }
+            else
+            {
+                Console.WriteLine("*** DID NOT UPDATE ***");
+            }
+        }
 
         //private void CreateDepartment()
         //{
@@ -231,9 +200,9 @@ namespace Capstone
 
             if (parks.Count > 0)
             {
-                parks.ForEach(dept =>
+                parks.ForEach(p =>
                 {
-                    Console.WriteLine(dept);
+                    Console.WriteLine(p);
                 });
             }
             else
@@ -334,17 +303,8 @@ namespace Capstone
         private void PrintMenu()
         {
             Console.WriteLine("Main Menu Please type in a command");
-            Console.WriteLine(" 1 - Show all departments");
-            Console.WriteLine(" 2 - Show all employees");
-            Console.WriteLine(" 3 - Employee search by first and last name");
-            Console.WriteLine(" 4 - Get employees without projects");
-            Console.WriteLine(" 5 - Get all projects");
-            Console.WriteLine(" 6 - Create Department");
-            Console.WriteLine(" 7 - Update Department Name");
-            Console.WriteLine(" 8 - Create Project");
-            Console.WriteLine(" 9 - Assign Employee to Project");
-            Console.WriteLine("10 - Remove Employee from Project");
-            Console.WriteLine("11 - Display Projects Assigned to An Employee");
+            Console.WriteLine(" 1 - Show all parks");
+            Console.WriteLine(" 2 - Show all campgrounds in the park");
 
             Console.WriteLine(" Q - Quit");
             Console.WriteLine();

@@ -15,5 +15,10 @@ namespace Capstone.Models
         public int Area { get; set; }
         public int Visitors { get; set; }
         public string Description { get; set; }
+
+        public override string ToString()
+        {
+            return (ParkID.ToString().PadRight(10) + Name.PadRight(10) + Location.PadRight(10) + "Established: " + EstablishDate.ToShortDateString().PadRight(10) + "Area:" + Area.ToString().PadRight(10) + "Visitors: " + Visitors.ToString().PadRight(10) + "\n" + Description);
+        }
     }
 }
