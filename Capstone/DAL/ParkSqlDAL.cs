@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Capstone.DAL;
 using Capstone.Models;
 using System.Data.SqlClient;
 
@@ -34,14 +35,16 @@ namespace Capstone.DAL
 
                     // execute command
                     SqlDataReader reader = cmd.ExecuteReader();
-
-                    p.ParkID = Convert.ToInt32(reader["park_id"]);
-                    p.Name = Convert.ToString(reader["name"]);
-                    p.Location = Convert.ToString(reader["location"]);
-                    p.EstablishDate = Convert.ToDateTime(reader["establish_date"]);
-                    p.Area = Convert.ToInt32(reader["area"]);
-                    p.Visitors = Convert.ToInt32(reader["visitors"]);
-                    p.Description = Convert.ToString(reader["description"]);
+                    while (reader.Read())
+                    {
+                        p.ParkID = Convert.ToInt32(reader["park_id"]);
+                        p.Name = Convert.ToString(reader["name"]);
+                        p.Location = Convert.ToString(reader["location"]);
+                        p.EstablishDate = Convert.ToDateTime(reader["establish_date"]);
+                        p.Area = Convert.ToInt32(reader["area"]);
+                        p.Visitors = Convert.ToInt32(reader["visitors"]);
+                        p.Description = Convert.ToString(reader["description"]);
+                    }
                 }
 
             }

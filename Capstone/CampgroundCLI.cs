@@ -40,12 +40,10 @@ namespace Capstone
                 else if (command == "1")
                 {
                     GetAllCampgrounds();
-                    break;
                 }
                 else if (command == "2")
                 {
-                    SearchReservations();
-                    break;
+                    MakeReservations();
                 }
                 else if (command == "3")
                 {
@@ -88,7 +86,7 @@ namespace Capstone
             Console.WriteLine(p);
         }
 
-        private void GetAllCampgrounds()
+        public void GetAllCampgrounds()
         {
             CampgroundSqlDAL dal = new CampgroundSqlDAL(DatabaseConnection);
             List<Campground> campgrounds = dal.DisplayAllCampgrounds(parkID);
@@ -107,20 +105,27 @@ namespace Capstone
         }
 
 
-        private void SearchReservations()
-        {
-            int resID = CLIHelper.GetInteger("Please enter the reservation ID you are searching for: ");
-            ReservationSqlDAL res = new ReservationSqlDAL(DatabaseConnection);
-            Reservation found = res.FindReservation(resID);
+        //private void SearchReservations()
+        //{
+        //    int resID = CLIHelper.GetInteger("Please enter the reservation ID you are searching for: ");
+        //    ReservationSqlDAL res = new ReservationSqlDAL(DatabaseConnection);
+        //    Reservation found = res.FindReservation(resID);
 
-            if (found.ReservationID == resID)
-            {
-                Console.WriteLine(res);  //reservation details go here
-            }
-            else
-            {
-                Console.WriteLine("Reservation not found. Please enter a valid ID");
-            }
+        //    if (found.ReservationID == resID)
+        //    {
+        //        Console.WriteLine(res);  //reservation details go here
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Reservation not found. Please enter a valid ID");
+        //    }
+        //}
+
+        private void MakeReservations()
+        {
+            ReservationCLI r = new ReservationCLI(parkID);
+            r.Display();
+
         }
 
 

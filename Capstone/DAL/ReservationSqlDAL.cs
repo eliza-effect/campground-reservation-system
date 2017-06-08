@@ -19,41 +19,41 @@ namespace Capstone.DAL
             connectionString = dbConnectionString;
         }
 
-        public Reservation FindReservation(int resID)
-        {
-            Reservation res = new Reservation();
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    // open connection
-                    conn.Open();
+        //public Reservation FindReservation(int resID)
+        //{
+        //    Reservation res = new Reservation();
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            // open connection
+        //            conn.Open();
 
-                    // create command object
-                    SqlCommand cmd = new SqlCommand($"SELECT * FROM reservation WHERE reservation_id = {resID}", conn);
+        //            // create command object
+        //            SqlCommand cmd = new SqlCommand($"SELECT * FROM reservation WHERE reservation_id = {resID};", conn);
 
-                    // execute command
-                    SqlDataReader reader = cmd.ExecuteReader();
+        //            // execute command
+        //            SqlDataReader reader = cmd.ExecuteReader();
 
-                    while (reader.Read())
-                    {
-                        res.ReservationID = Convert.ToInt32(reader["reservation_id"]);
-                        res.SiteID = Convert.ToInt32(reader["site_id"]);
-                        res.Name = Convert.ToString(reader["name"]);
-                        res.FromDate = Convert.ToDateTime(reader["from_date"]);
-                        res.ToDate = Convert.ToDateTime(reader["to_date"]);
-                        res.CreateDate = Convert.ToDateTime(reader["create_date"]);
-                    }
+        //            while (reader.Read())
+        //            {
+        //                res.ReservationID = Convert.ToInt32(reader["reservation_id"]);
+        //                res.SiteID = Convert.ToInt32(reader["site_id"]);
+        //                res.Name = Convert.ToString(reader["name"]);
+        //                res.FromDate = Convert.ToDateTime(reader["from_date"]);
+        //                res.ToDate = Convert.ToDateTime(reader["to_date"]);
+        //                res.CreateDate = Convert.ToDateTime(reader["create_date"]);
+        //            }
 
-                    return res;
-                }
-            }
-            catch (SqlException e)
-            {
-                throw;
-            }
-        }
-        // public bool MakeReservation(int parkId, int campgroundId, DateTime desiredStart, DateTime desiredEnd)
+        //        }
+        //    }
+        //    catch (SqlException e)
+        //    {
+        //        throw;
+        //    }
+        //    return res;
+        //}
+        //public bool MakeReservation(int parkId, int campgroundId, DateTime desiredStart, DateTime desiredEnd)
         //{
         //    Reservation r = new Reservation();
         //    try
@@ -63,20 +63,22 @@ namespace Capstone.DAL
         //            // open connection
         //            conn.Open();
 
-            //            // create command object
-            //            SqlCommand cmd = new SqlCommand($"INSERT INTO reservation VALUES () where site_id = (SELECT site_id FROM reservation WHERE from_date <= {desiredEnd.ToString()} OR to_date >= {desiredStart.ToString()};", conn);
+        //            // create command object
 
-            //            // execute command
-            //            int rowsAffected = cmd.ExecuteNonQuery();
+        //            //SqlCommand cmd = new SqlCommand($"INSERT INTO reservation VALUES () where site_id = (SELECT site_id FROM reservation WHERE from_date <= {desiredEnd.ToString()} OR to_date >= {desiredStart.ToString()};", conn);
 
-            //            return (rowsAffected > 0);
-            //        }
-            //    }
-            //    catch (SqlException e)
-            //    {
-            //        throw;
-            //    }
+        //            // execute command
+        //            int rowsAffected = cmd.ExecuteNonQuery();
 
-        }
+        //            return (rowsAffected > 0);
+        //        }
+        //    }
+        //    catch (SqlException e)
+        //    {
+        //        throw;
+        //    }
+
+        //}
+    }
 }
 
