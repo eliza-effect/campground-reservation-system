@@ -11,57 +11,72 @@ namespace Capstone.DAL
 {
     public class ReservationSqlDAL
     {
-            private string connectionString;
+        private string connectionString;
 
-            // Single Parameter Constructor
-            public ReservationSqlDAL(string dbConnectionString)
-            {
-                connectionString = dbConnectionString;
-            }
+        // Single Parameter Constructor
+        public ReservationSqlDAL(string dbConnectionString)
+        {
+            connectionString = dbConnectionString;
+        }
 
-             public bool MakeReservation(int campgroundId, DateTime desiredStart, DateTime desiredEnd)
+        public Reservation FindReservation(int resID)
+        {
+            Reservation res = new Reservation();
+            try
             {
-            Reservation r = new Reservation();
-                try
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    // open connection
+                    conn.Open();
+
+                    // create command object
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM reservation WHERE reservation_id = {resID}", conn);
+
+                    // execute command
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        // open connection
-                        conn.Open();
-
-                        // create command object
-                        SqlCommand cmd = new SqlCommand($"SELECT * FROM campground where park_id = {parkId};", conn);
-
-                        // execute command
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-                        // populate list
-
-                        while (reader.Read())
-                        {
-                            //read in value, reference by index or column name
-                            Campground c = new Campground();
-                            c.CampgroundID = Convert.ToInt32(reader["campground_id"]);
-                            c.ParkID = parkId;
-                            c.Name = Convert.ToString(reader["name"]);
-                            c.OpenFrom = Convert.ToInt32(reader["open_from_mm"]);
-                            c.OpenTo = Convert.ToInt32(reader["open_to_mm"]);
-                            c.DailyFee = Convert.ToDecimal(reader["daily_fee"]);
-
-
-
-                            allCampgrounds.Add(c);
-                        }
-
+                        res.ReservationID = Convert.ToInt32(reader["reservation_id"]);
+                        res.SiteID = Convert.ToInt32(reader["site_id"]);
+                        res.Name = Convert.ToString(reader["name"]);
+                        res.FromDate = Convert.ToDateTime(reader["from_date"]);
+                        res.ToDate = Convert.ToDateTime(reader["to_date"]);
+                        res.CreateDate = Convert.ToDateTime(reader["create_date"]);
                     }
-                }
-                catch (SqlException e)
-                {
-                    throw;
-                }
 
-                return allCampgrounds;
-
+                    return res;
+                }
+            }
+            catch (SqlException e)
+            {
+                throw;
             }
         }
+        // public bool MakeReservation(int parkId, int campgroundId, DateTime desiredStart, DateTime desiredEnd)
+        //{
+        //    Reservation r = new Reservation();
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            // open connection
+        //            conn.Open();
+
+            //            // create command object
+            //            SqlCommand cmd = new SqlCommand($"INSERT INTO reservation VALUES () where site_id = (SELECT site_id FROM reservation WHERE from_date <= {desiredEnd.ToString()} OR to_date >= {desiredStart.ToString()};", conn);
+
+            //            // execute command
+            //            int rowsAffected = cmd.ExecuteNonQuery();
+
+            //            return (rowsAffected > 0);
+            //        }
+            //    }
+            //    catch (SqlException e)
+            //    {
+            //        throw;
+            //    }
+
+        }
 }
+

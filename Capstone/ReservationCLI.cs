@@ -38,8 +38,41 @@ namespace Capstone
                 {
                     Console.WriteLine("Please try again");
                 }
-
             }
         }
+
+        //private void MakeReservation()
+        //{
+        //    int campgroundId = CLIHelper.GetInteger("Which campground would you like to reserve? (Provide campground ID)");
+        //    DateTime desiredStartDate = CLIHelper.GetDateTime("What is your desired arrival date?");
+        //    DateTime desiredEndDate = CLIHelper.GetDateTime("What is your desired departure date?");
+
+        //    Site s = new Site
+        //    {
+        //        CampgroundID = campgroundId
+
+
+        //    };
+        //    Reservation res = new Reservation();
+
+
+
+        //    ReservationSqlDAL resIO = new ReservationSqlDAL(DatabaseConnection);
+        //    //{
+            //    Id = departmentId,
+            //    Name = updatedName
+            //};
+            //DepartmentSqlDAL dal = new DepartmentSqlDAL(DatabaseConnection);
+            //bool result = dal.UpdateDepartment(updatedDepartment);
+
+            //if (result)
+            //{
+            //    Console.WriteLine("*** SUCCESS ***");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("*** DID NOT UPDATE ***");
+            //}
+        //}
     }
 }

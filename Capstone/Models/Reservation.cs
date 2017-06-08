@@ -14,5 +14,10 @@ namespace Capstone.Models
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public DateTime CreateDate { get; set; }
+
+        public override string ToString()
+        {
+            return (ReservationID.ToString().PadRight(10) + "Site ID: " + SiteID.ToString().PadRight(10) + Name.PadRight(10) + "Start Date: " + FromDate.ToShortDateString().PadRight(10) + "End Date: " + ToDate.ToShortDateString().PadRight(10) + "Reservation Created: " + CreateDate.ToShortDateString());
+        }
     }
 }
