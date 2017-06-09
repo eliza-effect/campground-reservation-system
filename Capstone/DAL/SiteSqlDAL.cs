@@ -39,11 +39,11 @@ namespace Capstone.DAL
                     // create command object
 
                     //SqlCommand cmd = new SqlCommand($"SELECT site.* FROM site INNER JOIN reservation ON reservation.site_id = site.site_id WHERE (site.campground_id = {campgroundId} AND (reservation.from_date >= '{desiredEnd.ToString()}' OR reservation.to_date <= '{desiredStart.ToString()}'));", conn);
-                    SqlCommand cmd = new SqlCommand($"SELECT TOP 5 site.*, campground.daily_fee FROM site INNER JOIN reservation ON reservation.site_id = site.site_id INNER JOIN campground on campground.campground_id = site.campground_id WHERE (site.campground_id = {campgroundId} AND (reservation.from_date > '{desiredEnd.ToString()}' OR reservation.to_date < '{desiredStart.ToString()}')) ORDER BY site_id;", conn);
-
+                   SqlCommand cmd = new SqlCommand($"SELECT TOP 5 site.*, campground.daily_fee FROM site LEFT JOIN reservation ON reservation.site_id = site.site_id INNER JOIN campground on campground.campground_id = site.campground_id WHERE (site.campground_id = {campgroundId} AND (reservation.from_date > '{desiredEnd.ToString()}' OR reservation.to_date < '{desiredStart.ToString()}')) ORDER BY site_id;", conn);
+                   //SqlCommand cmd = new SqlCommand($"SELECT TOP 5 site.*, campground.daily_fee FROM site INNER JOIN campground ON campground.campground_id = site.campground_id WHERE ")
 
                     // execute command
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                    //int rowsAffected = cmd.ExecuteNonQuery();
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
