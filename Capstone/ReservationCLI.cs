@@ -67,7 +67,7 @@ namespace Capstone
             SiteSqlDAL dal = new SiteSqlDAL(DatabaseConnection);
             List<Site> sites = dal.SearchReservation(campgroundId, desiredStartDate, desiredEndDate);
 
-            decimal totalFee = dal.GetFee(desiredStartDate, desiredEndDate);
+            decimal totalFee = dal.GetFee(campgroundId, desiredStartDate, desiredEndDate);
 
             if (sites.Count > 0)
             {
@@ -111,7 +111,6 @@ namespace Capstone
             {
                 Console.WriteLine("Error. Reservation not created. Please try again.");
             }
-
         }
     }
 }

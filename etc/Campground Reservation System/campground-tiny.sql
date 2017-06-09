@@ -209,3 +209,13 @@ ALTER TABLE campground ADD FOREIGN KEY (park_id) REFERENCES park(park_id);
 ALTER TABLE site ADD FOREIGN KEY (campground_id) REFERENCES campground(campground_id);
 ALTER TABLE reservation ADD FOREIGN KEY (site_id) REFERENCES site(site_id);
 
+
+
+SELECT site.* FROM site 
+INNER JOIN reservation ON reservation.site_id = site.site_id 
+WHERE (site.campground_id = 5 AND (reservation.from_date > '06/12/2017' OR reservation.to_date < '06/02/2017'));
+
+SELECT TOP 5 site.*, reservation.name FROM site
+LEFT JOIN reservation ON reservation.site_id = site.site_id
+WHERE (site.campground_id = 6 AND site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE (reservation.from_date > '01/12/2017' OR reservation.to_date < '01/02/2017')))
+ORDER BY site.site_id;

@@ -96,23 +96,6 @@ namespace Capstone
             }
         }
 
-
-        //private void SearchReservations()
-        //{
-        //    int resID = CLIHelper.GetInteger("Please enter the reservation ID you are searching for: ");
-        //    ReservationSqlDAL res = new ReservationSqlDAL(DatabaseConnection);
-        //    Reservation found = res.FindReservation(resID);
-
-        //    if (found.ReservationID == resID)
-        //    {
-        //        Console.WriteLine(res);  //reservation details go here
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Reservation not found. Please enter a valid ID");
-        //    }
-        //}
-
         private void MakeReservations()
         {
             ReservationCLI r = new ReservationCLI(parkID);

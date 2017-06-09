@@ -12,7 +12,6 @@ namespace Capstone.DAL
     public class SiteSqlDAL
     {
         private string connectionString;
-        private decimal dailyFee = 0.00M;
 
         // Single Parameter Constructor
         public SiteSqlDAL(string dbConnectionString)
@@ -20,10 +19,38 @@ namespace Capstone.DAL
             connectionString = dbConnectionString;
         }
 
-        public decimal GetFee(DateTime desiredStart, DateTime desiredEnd)
+        public decimal GetFee(int campgroundId, DateTime desiredStart, DateTime desiredEnd)
         {
+            decimal dailyFee = 0.00M;
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(connectionString))
+                {
+                    // open connection
+                    connect.Open();
+
+                    // create command object
+
+                    SqlCommand cmd2 = new SqlCommand($"SELECT daily_fee FROM campground WHERE campground_id = @campground_id;", connect);
+                    cmd2.Parameters.AddWithValue("@campground_id", campgroundId);
+
+                    // execute
+                    SqlDataReader reader2 = cmd2.ExecuteReader();
+
+                    while (reader2.Read())
+                    {
+                        dailyFee = Convert.ToDecimal(reader2["daily_fee"]);
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                throw;
+            }
             return dailyFee * (decimal)((desiredEnd - desiredStart).TotalDays);
         }
+
+
 
         public List<Site> SearchReservation(int campgroundId, DateTime desiredStart, DateTime desiredEnd)
         {
@@ -38,12 +65,13 @@ namespace Capstone.DAL
 
                     // create command object
 
-                    //SqlCommand cmd = new SqlCommand($"SELECT site.* FROM site INNER JOIN reservation ON reservation.site_id = site.site_id WHERE (site.campground_id = {campgroundId} AND (reservation.from_date >= '{desiredEnd.ToString()}' OR reservation.to_date <= '{desiredStart.ToString()}'));", conn);
-                   SqlCommand cmd = new SqlCommand($"SELECT TOP 5 site.*, campground.daily_fee FROM site LEFT JOIN reservation ON reservation.site_id = site.site_id INNER JOIN campground on campground.campground_id = site.campground_id WHERE (site.campground_id = {campgroundId} AND (reservation.from_date > '{desiredEnd.ToString()}' OR reservation.to_date < '{desiredStart.ToString()}')) ORDER BY site_id;", conn);
-                   //SqlCommand cmd = new SqlCommand($"SELECT TOP 5 site.*, campground.daily_fee FROM site INNER JOIN campground ON campground.campground_id = site.campground_id WHERE ")
+                   SqlCommand cmd = new SqlCommand($"SELECT TOP 5 site.* FROM site WHERE (site.campground_id = @campground_id AND site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE from_date BETWEEN @start AND @end OR to_date BETWEEN @start and @end OR (from_date > @start AND to_date < @end))) ORDER BY site.site_id;", conn);
+                    cmd.Parameters.AddWithValue("@campground_id", campgroundId);
+                    cmd.Parameters.AddWithValue("@start", desiredStart);
+                    cmd.Parameters.AddWithValue("@end", desiredEnd);
+
 
                     // execute command
-                    //int rowsAffected = cmd.ExecuteNonQuery();
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
@@ -56,10 +84,9 @@ namespace Capstone.DAL
                         site.Accessible = Convert.ToBoolean(reader["accessible"]);
                         site.MaxRVLength = Convert.ToInt32(reader["max_rv_length"]);
                         site.Utilities = Convert.ToBoolean(reader["utilities"]);
-                        temp.DailyFee = Convert.ToDecimal(reader["daily_fee"]);
                         siteList.Add(site);
                     }
-                    dailyFee = temp.DailyFee;
+
                 }
             }
             catch (SqlException e)

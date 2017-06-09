@@ -21,7 +21,7 @@ namespace Capstone.DAL
 
         public bool MakeReservation(string name, int siteId, DateTime desiredStart, DateTime desiredEnd)
         {
-            Reservation r = new Reservation();
+            //Reservation r = new Reservation();
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
