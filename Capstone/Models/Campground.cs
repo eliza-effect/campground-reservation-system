@@ -18,7 +18,7 @@ namespace Capstone.Models
 
         public override string ToString()
         {
-            return (CampgroundID.ToString().PadRight(10) + ParkID.ToString().PadRight(10) + Name.PadRight(10) + "Open from: " + OpenFrom.ToString().PadRight(10) + "Open to: " + OpenTo.ToString().PadRight(10) + "Daily fee: " + DailyFee.ToString());
+            return (CampgroundID.ToString().PadRight(10) + ParkID.ToString().PadRight(10) + Name.PadRight(10) + "Open from: " + OpenFrom.ToString().PadRight(10) + "Open to: " + OpenTo.ToString().PadRight(10) + "Daily fee: " + Math.Round(DailyFee, 2).ToString());
         }
     }
 }

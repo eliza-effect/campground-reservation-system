@@ -1,5 +1,4 @@
-﻿
-using Capstone.DAL;
+﻿using Capstone.DAL;
 using Capstone.Models;
 using System;
 using System.Configuration;
@@ -32,12 +31,7 @@ namespace Capstone
 
                 Console.Clear();
 
-                if (command.ToLower() == "q")
-                {
-                    Console.WriteLine("Thank you for using the campground reservation system");
-                    return;
-                }
-                else if (command == "1")
+                if (command == "1")
                 {
                     GetAllCampgrounds();
                 }
@@ -57,8 +51,6 @@ namespace Capstone
 
                 PrintMenu();
             }
-
-
         }
 
 
@@ -125,7 +117,6 @@ namespace Capstone
         {
             ReservationCLI r = new ReservationCLI(parkID);
             r.Display();
-
         }
 
 

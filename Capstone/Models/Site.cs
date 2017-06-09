@@ -18,7 +18,7 @@ namespace Capstone.Models
 
         public override string ToString()
         {
-            return ("Site ID: " + SiteID.ToString().PadRight(10) + "Campground ID: " + CampgroundID.ToString().PadRight(10) + "Site #: " + SiteNumber.ToString().PadRight(10) + "Max Occupancy: " + MaxOccupancy.ToString().PadRight(10) + "Accessible: " +  Accessible.ToString().PadRight(10) + "Max RV Length: " + MaxRVLength.ToString().PadRight(10) + "Utilities: " + Utilities.ToString());
+            return ("Site #: " + SiteNumber.ToString().PadRight(10) + "Max Occupancy: " + MaxOccupancy.ToString().PadRight(10) + "Accessible: " +  Accessible.ToString().PadRight(10) + "Max RV Length: " + MaxRVLength.ToString().PadRight(10) + "Utilities: " + Utilities.ToString());
         }
     }
 }

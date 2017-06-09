@@ -28,7 +28,6 @@ namespace Capstone
                 Console.WriteLine("Select Command");
                 Console.WriteLine("1] >> Search for Available Reservation");
                 Console.WriteLine("2] >> Return to Previous Screen");
-                Console.WriteLine("Q] >> Return to Main Menu");
 
                 Console.Write("What option do you want to select? ");
                 string input = Console.ReadLine();
@@ -45,11 +44,6 @@ namespace Capstone
                     Console.WriteLine("Returning to Previous Screen");
                     break;
                 }
-                else if (input == "Q")
-                {
-                    Console.WriteLine("Returning to main menu");
-                    break;
-                }
                 else
                 {
                     Console.WriteLine("Please try again");
@@ -60,33 +54,65 @@ namespace Capstone
         private void MakeReservation()
         {
             List<Site> availableSites = new List<Site>();
-            int campgroundId = CLIHelper.GetInteger("Which campground would you like to reserve? Enter (0) to cancel. (Provide campground ID)");
-            DateTime desiredStartDate = CLIHelper.GetDateTime("What is your desired arrival date?");
-            DateTime desiredEndDate = CLIHelper.GetDateTime("What is your desired departure date?");
-           if (campgroundId == 0)
+            int campgroundId = CLIHelper.GetInteger("Which campground (ID number) would you like to reserve? Enter (0) to cancel.");
+
+            if (campgroundId == 0)
             {
                 return;
             }
-           else
+
+            DateTime desiredStartDate = CLIHelper.GetDateTime("What is your desired arrival date? (__/__/____)");
+            DateTime desiredEndDate = CLIHelper.GetDateTime("What is your desired departure date? (__/__/____)");
+
+            SiteSqlDAL dal = new SiteSqlDAL(DatabaseConnection);
+            List<Site> sites = dal.SearchReservation(campgroundId, desiredStartDate, desiredEndDate);
+
+            decimal totalFee = dal.GetFee(desiredStartDate, desiredEndDate);
+
+            if (sites.Count > 0)
             {
-                SiteSqlDAL dal = new SiteSqlDAL(DatabaseConnection);
-                List<Site> sites = dal.MakeReservation(campgroundId, desiredStartDate, desiredEndDate);
-                if (sites.Count > 0)
+                sites.ForEach(s =>
                 {
-                    sites.ForEach(s =>
-                    {
-                        Console.WriteLine(s);
-                    });
-                }
-                else
+                    Console.WriteLine(s + "    $" + Math.Round(totalFee, 2));
+                });
+            }
+            else
+            {
+                Console.WriteLine("**** NO RESULTS ****");
+                return;
+            }
+
+            int siteNumber = CLIHelper.GetInteger("Which site would you like to reserve? (Enter 0 to cancel)");
+            int tempSiteID = 0;
+
+            sites.ForEach(s =>
+            {
+                if (s.SiteNumber == siteNumber)
                 {
-                    Console.WriteLine("**** NO RESULTS ****");
+                    tempSiteID = s.SiteID;
                 }
+            });
+
+            if (siteNumber == 0)
+            {
+                return;
+            }
+
+            string reservationName = CLIHelper.GetString("What name should the reservation be made under?");
+
+            ReservationSqlDAL res = new ReservationSqlDAL(DatabaseConnection);
+            bool result = res.MakeReservation(reservationName, tempSiteID, desiredStartDate, desiredEndDate);
+
+            if (result)
+            {
+                Console.WriteLine($"Your reservation has been created under the name {reservationName}.");
+            }
+            else
+            {
+                Console.WriteLine("Error. Reservation not created. Please try again.");
             }
 
         }
-
-
-
-        }
+    }
 }
+
