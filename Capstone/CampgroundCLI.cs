@@ -74,8 +74,13 @@ namespace Capstone
         {
             ParkSqlDAL dal = new ParkSqlDAL(DatabaseConnection);
             Park p = dal.GetParkInfo(parkID);
-
-            Console.WriteLine(p);
+            Console.WriteLine("Park Information Screen");
+            Console.WriteLine(p.Name);
+            Console.WriteLine("Location: ".PadRight(20) + p.Location);
+            Console.WriteLine("Established: ".PadRight(20) + p.EstablishDate);
+            Console.WriteLine("Area: ".PadRight(20) + p.Area);
+            Console.WriteLine("Annual Visitors: ".PadRight(20) + p.Visitors + "\n");
+            Console.WriteLine(p.Description + "\n");
         }
 
         public void GetAllCampgrounds()
@@ -85,6 +90,7 @@ namespace Capstone
 
             if (campgrounds.Count > 0)
             {
+                Console.WriteLine(" ".PadRight(11) + "Name".PadRight(20) + "Open".PadRight(10) + "Close".PadRight(10) + "Daily Fee");
                 campgrounds.ForEach(c =>
                 {
                     Console.WriteLine(c);
@@ -98,6 +104,7 @@ namespace Capstone
 
         private void MakeReservations()
         {
+            GetAllCampgrounds();
             ReservationCLI r = new ReservationCLI(parkID);
             r.Display();
         }

@@ -71,6 +71,9 @@ namespace Capstone
 
             if (sites.Count > 0)
             {
+                Console.WriteLine("Results Matching Your Search Criteria");
+                Console.WriteLine("Site No.".PadRight(10) + "Max. Occup.".PadRight(15) + "Accessible?".PadRight(15) + "Max. RV Length".PadRight(15) + "Utility".PadRight(15) + "Cost");
+
                 sites.ForEach(s =>
                 {
                     Console.WriteLine(s + "    $" + Math.Round(totalFee, 2));
