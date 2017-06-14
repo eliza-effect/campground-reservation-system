@@ -37,7 +37,7 @@ namespace Capstone.DAL
                     // execute
                     SqlDataReader reader2 = cmd2.ExecuteReader();
 
-                    while (reader2.Read())
+                    if (reader2.Read())
                     {
                         dailyFee = Convert.ToDecimal(reader2["daily_fee"]);
                     }

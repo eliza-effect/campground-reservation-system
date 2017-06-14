@@ -22,7 +22,7 @@ namespace Capstone.DAL
         public Park GetParkInfo(int parkID)
         {
 
-            Park p = new Park();
+            Park p = null;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -35,8 +35,9 @@ namespace Capstone.DAL
 
                     // execute command
                     SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    if (reader.Read())
                     {
+                        p = new Park();
                         p.ParkID = Convert.ToInt32(reader["park_id"]);
                         p.Name = Convert.ToString(reader["name"]);
                         p.Location = Convert.ToString(reader["location"]);
@@ -79,7 +80,6 @@ namespace Capstone.DAL
 
                     while (reader.Read())
                     {
-                        //read in value, reference by index or column name
                         Park p = new Park();
                         p.ParkID = Convert.ToInt32(reader["park_id"]);
                         p.Name = Convert.ToString(reader["name"]);

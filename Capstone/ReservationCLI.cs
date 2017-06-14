@@ -86,15 +86,17 @@ namespace Capstone
             }
 
             int siteNumber = CLIHelper.GetInteger("Which site would you like to reserve? (Enter 0 to cancel)");
-            int tempSiteID = 0;
 
-            sites.ForEach(s =>
-            {
-                if (s.SiteNumber == siteNumber)
-                {
-                    tempSiteID = s.SiteID;
-                }
-            });
+            //check out this fancy Linq thing that totally duplicates the commented-out stuff below
+            int? tempSiteID = sites.First(s => s.SiteNumber == siteNumber)?.SiteID;
+
+            //sites.ForEach(s =>
+            //{
+            //    if (s.SiteNumber == siteNumber)
+            //    {
+            //        tempSiteID = s.SiteID;
+            //    }
+            //});
 
             if (siteNumber == 0)
             {

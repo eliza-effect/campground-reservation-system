@@ -211,11 +211,35 @@ ALTER TABLE reservation ADD FOREIGN KEY (site_id) REFERENCES site(site_id);
 
 
 
-SELECT site.* FROM site 
-INNER JOIN reservation ON reservation.site_id = site.site_id 
-WHERE (site.campground_id = 5 AND (reservation.from_date > '06/12/2017' OR reservation.to_date < '06/02/2017'));
+--SELECT site.* FROM site 
+--INNER JOIN reservation ON reservation.site_id = site.site_id 
+--WHERE (site.campground_id = 5 AND (reservation.from_date > '06/12/2017' OR reservation.to_date < '06/02/2017'));
+
+
+DECLARE @start datetime = '6/2/2017';
+DECLARE @end datetime = '6/12/2017';
+
+SELECT reservation.* FROM reservation WHERE (reservation.from_date > @start OR reservation.to_date < @end);
+SELECT reservation.* FROM reservation WHERE from_date BETWEEN @start AND @end OR to_date BETWEEN @start and @end OR (from_date > @start AND to_date < @end)
 
 SELECT TOP 5 site.*, reservation.name FROM site
 LEFT JOIN reservation ON reservation.site_id = site.site_id
-WHERE (site.campground_id = 6 AND site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE (reservation.from_date > '01/12/2017' OR reservation.to_date < '01/02/2017')))
+WHERE (site.campground_id = 1 AND site.site_id NOT IN (SELECT reservation.* FROM reservation WHERE (reservation.from_date > @start OR reservation.to_date < @end)))
 ORDER BY site.site_id;
+
+DECLARE @start datetime = '5/2/2017';
+DECLARE @end datetime = '5/12/2017';
+
+SELECT TOP 5 site.* FROM site
+WHERE (site.campground_id = 5 AND site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE from_date BETWEEN @start AND @end OR to_date BETWEEN @start and @end OR (from_date > @start AND to_date < @end)))
+ORDER BY site.site_id;
+
+
+SELECT TOP 5 site.* FROM site WHERE (site.campground_id = 5 AND site.site_id NOT IN (SELECT reservation.site_id FROM reservation WHERE from_date BETWEEN @start AND @end OR to_date BETWEEN @start and @end OR (from_date > @start AND to_date < @end))) ORDER BY site.site_id;
+
+
+
+-- from is between start and end OR to is between start and end
+-- from is between start and end AND to is between start and end
+
+SELECT TOP 1 daily_fee FROM campground WHERE campground_id = 7;
